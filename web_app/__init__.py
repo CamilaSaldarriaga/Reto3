@@ -9,8 +9,6 @@ from flask import Flask, render_template, redirect, url_for, request, flash
 
 def create_app(test_config=None):
     SECRET_KEY = '?\xbf,\xb4\x8d\xa3"<\x9c\xb0@\x0f5\xab,w\xee\x8d$0\x13\x8b83'
-    UPLOAD_FOLDER = 'uploads'
-    MODEL_FOLDER = 'model'
 
     app = Flask(__name__, instance_relative_config=True)
     app.config['SECRET_KEY'] = SECRET_KEY
@@ -38,7 +36,7 @@ def create_app(test_config=None):
         descriptor.insert(0, 'id', 'imagen')
         descriptor.to_csv('{}/temp/features.csv'.format(app.instance_path), sep=';', index=False, header=False)
         os.system('java -jar {}/model/openXBOW.jar -i {}/temp/features.csv -o {}/temp/bow.csv -b {}/model/codebook.txt'.format(*[app.instance_path]*4))
-        descriptor = pd.read_csv('{}/bow.csv'.format(app.instance_path), sep=';', header=None)
+        descriptor = pd.read_csv('{}/temp/bow.csv'.format(app.instance_path), sep=';', header=None)
         descriptor = classifier.predict(descriptor)
         print(descriptor)
         flash('label: {}'.format(*descriptor), 'alert alert-success')
