@@ -1,0 +1,8 @@
+.vscode/
+
+images/
+
+__pycache__/
+instance/
+
+data*
